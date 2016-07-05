@@ -1,0 +1,23 @@
+{
+  "name": "srsv",
+  "version": "1.0.0",
+  "description": "A text based command line game exploring space.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacobdfriedmann/srsv.git"
+  },
+  "author": "Jacob Friedmann",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jacobdfriedmann/srsv/issues"
+  },
+  "homepage": "https://github.com/jacobdfriedmann/srsv#readme",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "game-prompt": "0.0.2"
+  }
+}
