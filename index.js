@@ -294,14 +294,14 @@ function lose() {
   gamePrompt([
     'You ran out of fuel',
     'Game Over'.red
-  ], function () {});
+  ]);
 }
 
 function win() {
   gamePrompt([
     '"Great work Captain ' + playerName + '."',
     '"Your mission is complete"'.green
-  ], function () {});
+  ]);
 }
 
 begin();

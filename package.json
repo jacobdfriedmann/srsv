@@ -18,6 +18,6 @@
   "homepage": "https://github.com/jacobdfriedmann/srsv#readme",
   "dependencies": {
     "colors": "^1.1.2",
-    "game-prompt": "0.0.2"
+    "game-prompt": "0.0.3"
   }
 }
