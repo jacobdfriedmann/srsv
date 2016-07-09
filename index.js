@@ -3,53 +3,13 @@ var colors = require('colors');
 
 var playerName;
 var vehicleName;
-var destinations = [
-  {
-    name: 'Earth',
-    distance: 10,
-    handler: approachEarth
-  },
-  {
-    name: 'Mesnides',
-    distance: 20,
-    handler: approachMesnides
-  },
-  {
-    name: 'Laplides',
-    distance: 50,
-    handler: approachLaplides
-  },
-  {
-    name: 'Kiyturn',
-    distance: 120,
-    handler: approachKiyturn
-  },
-  {
-    name: 'Aenides',
-    distance: 25,
-    handler: approachAenides
-  },
-  {
-    name: 'Cramuthea',
-    distance: 200,
-    handler: approachCramuthea
-  },
-  {
-    name: 'Smeon T9Q',
-    distance: 400,
-    handler: approachSmeon
-  },
-  {
-    name: 'Gleshan 7Z9',
-    distance: 85,
-    handler: approachGleshan
-  }
-];
 var fuel = 1000;
 var playerInventory = [];
 
 function addItemToInventory(item) {
+  // Ensure this item is not already in inventory
   if (playerInventory.indexOf(item) < 0) {
+    // Push it into the inventory array
     playerInventory.push(item);
   }
 }
@@ -88,14 +48,20 @@ function saveVehicleName(name) {
 }
 
 function askTravel() {
+  // Create a string for displaying the current level of fuel
   var fuelPrompt = 'You have ' + fuel + ' gallons of remaining.';
+  // Build up a string for choosing the destination
   var travelPrompt = 'Choose your destination Captain ' + playerName + '.';
-  destinations.forEach(function(destination) {
-    travelPrompt += '\n(' + destination.name.charAt(0) + ')' +
-      destination.name.substr(1) + ' - ' +
-      destination.distance + ' lightyears';
-  });
+  travelPrompt += '\n(E)arth - 10 lightyears';
+  travelPrompt += '\n(M)esnides - 20 lightyears';
+  travelPrompt += '\n(L)aplides - 50 lightyears';
+  travelPrompt += '\n(K)iyturn - 120 lightyears';
+  travelPrompt += '\n(A)enides - 25 lightyears';
+  travelPrompt += '\n(C)ramuthea - 200 lightyears';
+  travelPrompt += '\n(S)meon T9Q - 400 lightyears';
+  travelPrompt += '\n(G)leshan 7Z9 - 85 lightyears';
 
+  // Display both strings to the user
   gamePrompt([
     fuelPrompt,
     travelPrompt
@@ -103,31 +69,110 @@ function askTravel() {
 }
 
 function travel(planet) {
-  var destination;
-  destinations.forEach(function(d) {
-    if (planet.toUpperCase() === d.name.charAt(0)) {
-      destination = d;
-    }
-  });
+  // Standardize the case of the input
+  var planetUpperCase = planet.toUpperCase();
 
-  if (!destination) {
-    gamePrompt('Sorry, I do not recognize that destination.', askTravel);
-  } else {
-    fuel -= destination.distance;
+  // Check to see if the user indicated Earth
+  if (planetUpperCase === 'E') {
+    // Subtract the appropriate amount of gas from the global fuel
+    // variable
+    fuel -= 10;
+    // If the fuel has dipped below 0, end the game
+    if (fuel <= 0) {
+      lose();
+
+    // Else, continue travelling to earth
+    } else {
+      gamePrompt([
+        'Travelling to Earth using 10 gallons of fuel',
+        'You now have ' + fuel + ' gallons of fuel remaining.'
+      ], approachEarth);
+    }
+  } else if (planetUpperCase === 'M') {
+    // this is the same as above, except for Mesnides
+    fuel -= 20;
     if (fuel <= 0) {
       lose();
     } else {
       gamePrompt([
-        'Travelling to ' + destination.name + ' using ' + destination.distance + ' gallons of fuel',
+        'Travelling to Mesnides using 20 gallons of fuel',
         'You now have ' + fuel + ' gallons of fuel remaining.'
-      ], destination.handler);
+      ], approachMesnides);
     }
+  } else if (planetUpperCase === 'L') {
+    fuel -= 50;
+    if (fuel <= 0) {
+      lose();
+    } else {
+      gamePrompt([
+        'Travelling to Laplides using 50 gallons of fuel',
+        'You now have ' + fuel + ' gallons of fuel remaining.'
+      ], approachLaplides);
+    }
+  } else if (planetUpperCase === 'K') {
+    fuel -= 120;
+    if (fuel <= 0) {
+      lose();
+    } else {
+      gamePrompt([
+        'Travelling to Kiyturn using 120 gallons of fuel',
+        'You now have ' + fuel + ' gallons of fuel remaining.'
+      ], approachKiyturn);
+    }
+  } else if (planetUpperCase === 'A') {
+    fuel -= 25;
+    if (fuel <= 0) {
+      lose();
+    } else {
+      gamePrompt([
+        'Travelling to Aenides using 25 gallons of fuel',
+        'You now have ' + fuel + ' gallons of fuel remaining.'
+      ], approachAenides);
+    }
+  } else if (planetUpperCase === 'C') {
+    fuel -= 200;
+    if (fuel <= 0) {
+      lose();
+    } else {
+      gamePrompt([
+        'Travelling to Cramuthea using 200 gallons of fuel',
+        'You now have ' + fuel + ' gallons of fuel remaining.'
+      ], approachCramuthea);
+    }
+  } else if (planetUpperCase === 'S') {
+    fuel -= 400;
+    if (fuel <= 0) {
+      lose();
+    } else {
+      gamePrompt([
+        'Travelling to Smeon T9Q using 400 gallons of fuel',
+        'You now have ' + fuel + ' gallons of fuel remaining.'
+      ], approachSmeon);
+    }
+  } else if (planetUpperCase === 'G') {
+    fuel -= 85;
+    if (fuel <= 0) {
+      lose();
+    } else {
+      gamePrompt([
+        'Travelling to Gleshan 7Z9 using 85 gallons of fuel',
+        'You now have ' + fuel + ' gallons of fuel remaining.'
+      ], approachGleshan);
+    }
+  // If the user put in characters we don't recognize, let them try again
+  } else {
+    gamePrompt(
+      'That is not a recognized destination',
+      travel
+    );
   }
 }
 
 function approachEarth() {
+  // On Earth, look to see if the user has collected sufficient artifacts to win.
   if (playerInventory.length === 3) {
     gamePrompt('You\'ve arrived at Earth with 3 artifacts.', win);
+  // If not, send them back out
   } else {
     fuel += 10;
     gamePrompt([
@@ -157,11 +202,17 @@ function askSmeon() {
 }
 
 function answerSmeon(answer) {
+  // Check user input for particular letter
   if (answer.toLowerCase() === 'a') {
+    // Add the item to the players global inventory by using the addItemToInventory
+    // helper function we defined above.
     addItemToInventory('Cramun Flower');
+
     gamePrompt([
       '"Here, take this dried Cramun Flower from our home planet."',
       'Cramun Flower added to your inventory.',
+      // Here add the 's' to the end of 'artifact' if the number of things in the
+      // inventory array is greater than 1.
       'You now have ' + playerInventory.length + ' artifact' + (playerInventory.length > 1 ? 's.' : '.')
     ], askSmeon);
   } else if (answer.toLowerCase() === 'p') {
@@ -170,6 +221,9 @@ function answerSmeon(answer) {
       '"We fended them off, but they are an aggresive people to be avoided.'
     ], askSmeon);
   } else if (answer.toLowerCase() === 'l') {
+    // If they want to leave, go back to the travel prompt. Here we can just call it
+    // directly instead of letting gamePrompt do it since we have nothing to say to the
+    // user before it happens.
     askTravel();
   } else {
     gamePrompt('I\'m sorry traveler, but I don\'t understand your question', askSmeon);
@@ -304,4 +358,5 @@ function win() {
   ]);
 }
 
+// Call the begin function to actually get things going!
 begin();
